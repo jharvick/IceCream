@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ice Cream Order</title>
+<style>
+  /* Add your CSS styles here */
+  body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+  }
+
+  .container {
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .scoops-input {
+    margin-bottom: 20px;
+  }
+
+  /* Order summary styles */
+  .order-summary {
+    margin-top: 50px;
+  }
+
+  /* Toppings section styles */
+  .toppings-container {
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    width: 200px;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .toppings-container label {
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  .toppings-container input[type="checkbox"] {
+    margin-right: 5px;
+  }
+
+  /* Separate toppings into rows */
+  .toppings-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 5px; /* Adjust spacing between rows */
+  }
+
+  /* Adjust width of toppings rows */
+  .toppings-row div {
+    width: 100px; /* Adjust width of each topping */
+  }
+
+</style>
+</head>
+<body>
+  <h2>Ice Cream Order</h2>
+  <div class="container">
+    <form id="order-form">
+      <div class="scoops-input">
+        <label for="scoops">Number of Scoops (1-4):</label>
+        <br>
+        <input type="number" id="scoops" name="scoops" min="1" max="4" required>
+      </div>
+      <div>
+        <input type="radio" id="cone" name="container" value="cone" onclick="toggleToppings(false)">
+        <label for="cone">Ice Cream Cone</label>
+        <input type="radio" id="cup" name="container" value="cup" onclick="toggleToppings(true)">
+        <label for="cup">Ice Cream Cup</label>
+      </div>
+      <div id="toppings-section" style="display: none;" class="toppings-container">
+        <label>Toppings:</label>
+        <div class="toppings-row">
+          <div>
+            <label for="sprinkles">Sprinkles</label>
+            <input type="checkbox" id="sprinkles" name="topping" value="sprinkles">
+          </div>
+          <div>
+            <label for="oreos">Oreos</label>
+            <input type="checkbox" id="oreos" name="topping" value="oreos">
+          </div>
+        </div>
+        <div class="toppings-row">
+          <div>
+            <label for="whippedCream">Whipped Cream</label>
+            <input type="checkbox" id="whippedCream" name="topping" value="whippedCream">
+          </div>
+          <div>
+            <label for="fudge">Fudge</label>
+            <input type="checkbox" id="fudge" name="topping" value="fudge">
+          </div>
+        </div>
+      </div>
+      <button type="submit">Place Order</button>
+    </form>
+  </div>
+
+  <div class="order-summary" id="order-summary" style="display: none;">
+    <h3>Order Summary</h3>
+    <p id="base-price">Base Price: $0.00</p>
+    <p id="tax">Tax (Dallas, TX): $0.00</p>
+    <p id="total">Total: $0.00</p>
+  </div>
+
+  <script>
+    function toggleToppings(showToppings) {
+      var toppingsSection = document.getElementById('toppings-section');
+      toppingsSection.style.display = showToppings ? 'block' : 'none';
+    }
+
+    document.getElementById('order-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      var container = document.querySelector('input[name="container"]:checked').value;
+      var scoops = parseInt(document.getElementById('scoops').value);
+      var toppings = document.querySelectorAll('input[name="topping"]:checked');
+
+      var basePrice = 2.25 + (scoops - 1) * 1.25;
+      var toppingPrice = toppings.length * 0.5; // Assuming each topping costs $0.50
+      var totalToppings = Array.from(toppings).map(topping => topping.value).join(', ');
+
+      var taxRate = 0.0825; // Dallas, TX tax rate
+      var tax = (basePrice + toppingPrice) * taxRate;
+      var total = basePrice + toppingPrice + tax;
+
+      document.getElementById('base-price').innerText = 'Base Price: $' + basePrice.toFixed(2);
+      document.getElementById('tax').innerText = 'Tax (Dallas, TX): $' + tax.toFixed(2);
+      document.getElementById('total').innerText = 'Total: $' + total.toFixed(2);
+
+      var orderSummary = document.getElementById('order-summary');
+      orderSummary.style.display = 'block';
+    });
+  </script>
+</body>
+</html>
+
+
+
+
+
